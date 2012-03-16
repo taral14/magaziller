@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+/* do not change this stylesheet */
+body {
+padding: 0;
+margin: 0;
+font: 13px Arial, Helvetica, Garuda, sans-serif;
+}
+li, em, strong, pre, code {
+padding: 0;
+margin: 0;
+}
+table {
+font-size: inherit;
+font: 100%;
+}
+img {
+border: 0;
+}
+.clearb {
+	display:block;
+	clear:both;
+}

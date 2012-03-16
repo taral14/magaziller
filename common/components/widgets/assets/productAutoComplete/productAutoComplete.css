@@ -1,0 +1,12 @@
+.ui-autocomplete-category {
+	font-weight: bold;
+    padding: .2em .4em;
+    line-height: 1.5;
+    min-width: 250px;
+}
+.ui-menu-item a {
+    height: 40px;
+}
+.ui-menu-item img {
+    float: left;
+}

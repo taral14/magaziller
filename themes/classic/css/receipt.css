@@ -1,0 +1,48 @@
+body {
+padding: 30px 0;
+margin: 0;
+font: 11px Arial, Helvetica, Garuda, sans-serif;
+*font-size: small;
+*font: x-small;
+}
+h1, h2, h3, h4, h5, h6, li, em, strong, pre, code {
+padding: 0;
+margin: 0;
+line-height: 1em;
+font-size: 100%;
+font-weight: normal;
+font-style: normal;
+}
+table {
+font-size: inherit;
+font: 100%;
+}
+img {
+border: 0;
+}
+.clearb {
+	display:block;
+	clear:both;
+}
+.center {
+	width:783px;
+	margin:0 auto;
+}
+.body {
+	background:url(kvitancia.png) no-repeat;
+	width:824px;
+	height:650px;
+}
+p {
+	margin:0;
+	position:absolute;
+}
+.top {
+	float:left;
+	width:824px;
+	height:325px;
+}
+.bottom {
+	float:left;
+	width:824px;
+}
