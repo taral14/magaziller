@@ -28,4 +28,3 @@ if($_SERVER['REMOTE_ADDR']=='127.0.0.1')
     $config=CMap::mergeArray($config, include(Yii::getPathOfAlias('common.config.main-local').'.php'));
 
 Yii::createWebApplication($config)->run();
-//comment
