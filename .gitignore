@@ -1,0 +1,5 @@
+protected/runtime
+.idea
+/nbproject/
+index.php
+assets/
