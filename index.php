@@ -1,8 +1,4 @@
 <?php
-
-// ------    -------
-// -----------------
-
 define('YII_DEBUG',$_SERVER['REMOTE_ADDR']=='127.0.0.1');
 define('IS_BACKEND',false);
 define('IS_FRONTED',true);

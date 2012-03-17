@@ -53,13 +53,8 @@
                     <div class="enter">
                         <a href="#">Войти</a>
                     </div>
-                    <a href="#"><div class="cart">
-                        <div class="cart_head">
-                        Корзина
-                        </div>
-                        <p>1 товар,</p>
-                        <p>перейти</p>
-                    </div></a>
+                    <?php echo CHtml::tag('div', array('id'=>'user-box'), $this->renderPartial('//order/_view',null,true))?>
+                    <?php echo CHtml::tag('div', array('id'=>'magaziller-cart-box'), $this->renderPartial('//order/_view',null,true))?>
                     <b class="clearb"></b>
                     <div class="social">
                         <ul>

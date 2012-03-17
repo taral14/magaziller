@@ -64,7 +64,7 @@ class Controller extends CController
                     id:productId,
                     quantity:quantity
                 }, function(html){
-                    $('#cart-box').html(html);
+                    $('#magaziller-cart-box').html(html);
                 })
             }
         ");
