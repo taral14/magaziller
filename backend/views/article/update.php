@@ -33,7 +33,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
 <div class="form">
 
     <?php echo CHtml::hiddenField('returnUrl', Yii::app()->request->getRequestUri()); ?>
-    <?php echo CHtml::hiddenField('MenuItem[uri]', $model->url); ?>
+    <?php echo CHtml::hiddenField('MenuItem[uri]', Yii::app()->request->getHostInfo().$model->url); ?>
 
     <div class="row">
            <label for="MenuItem_id">Выберите пункт меню</label>
