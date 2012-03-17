@@ -45,11 +45,7 @@
                     </div>
                 </div>
                 <div class="header_nav">
-                    <ul>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Оплата и Доставка</a></li>
-                        <li><a href="#">Контакты</a></li>
-                    </ul>
+                    <?php $this->widget('Menu', array('items'=>MenuItem::model()->findAll('parent_id=1'))); ?>
                 </div>
             </div>
             <div class="header_r">
@@ -115,6 +111,5 @@
         </div>
     </div>
 </div>
-<###dynamic-counters###>
 </body>
 </html>

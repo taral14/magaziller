@@ -116,8 +116,7 @@ class Controller extends CController
     public function processOutput($output)
    	{
         $output=parent::processOutput($output);
-
-
+        $output=preg_replace('/(<\\/body\s*>)/is',Yii::app()->config['counters'].'$1',$output,1);
    		return $output;
    	}
 

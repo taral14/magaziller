@@ -109,7 +109,7 @@ class Controller extends CController {
         }");
 
         $cs->registerScript('SaveDisplayMessage', "$('.save_button').click(function(){
-            displayMessage('Идет сохранение...', 'flash-success');
+            displayMessage('Идет загрузка...', 'flash-success');
         });");
 
         if(Yii::app()->user->hasFlash('success')) {
