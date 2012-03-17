@@ -9,6 +9,7 @@
  * @property string $admin_email
  * @property string $contact_email
  * @property string $contact_phone
+ * @property string $contact_address
  * @property string $counters
  * @property integer $price_accuracy
  * @property integer $currency_default
@@ -73,6 +74,9 @@ class Config extends CActiveRecord
             ),
             'contact_phone' => array(
                 'length'=>array('max'=>255)
+            ),
+            'contact_address' => array(
+                'length'=>array('max'=>500)
             ),
             'main_text' => array(
                 'filter'=>$html_purifier
@@ -281,6 +285,7 @@ class Config extends CActiveRecord
 			'admin_email' => 'Основной E-mail',
 			'contact_email' => 'Контактный E-mail',
             'contact_phone' => 'Контактный телефон',
+            'contact_address' => 'Контактный адрес',
             'main_text' => 'Текст на главной',
             'contact_text' => 'Текст в контактах',
             'contact_map' => 'Код карты в контактах',

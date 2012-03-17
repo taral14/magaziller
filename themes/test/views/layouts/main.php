@@ -27,8 +27,9 @@
                 </div>
                 <div class="phone">
                     <ul>
-                        <li><span>(044) </span>205 16 22</li>
-                        <li><span>(044) </span>205 16 22</li>
+                        <li>
+                            <?php echo Yii::app()->config['contact_phone']; ?>
+                        </li>
                     </ul>
                 </div>
                 <div class="search">
@@ -101,7 +102,7 @@
                     </table>
                 </div>
                 <div class="footer_text">
-                	<strong>Главный офис: </strong>Красноармейская 42б, тел. <strong>(044) </strong>239-88-22
+                	<strong>Главный офис: <?php echo Yii::app()->config['contact_address']; ?>
                 </div>
                 <div class="footer_social">
                 	<ul>
@@ -114,5 +115,6 @@
         </div>
     </div>
 </div>
+<###dynamic-counters###>
 </body>
 </html>

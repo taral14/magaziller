@@ -1,4 +1,5 @@
 <?php
+'jjjjjj';
 $yii=dirname(__FILE__).'/yii/yii.php';
 
 if(!file_exists($yii))

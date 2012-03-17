@@ -17,14 +17,13 @@
         <div class="content_r">
             <div class="slider">
                 <?php if($this->hasScrap('Слайдер на главной')): ?>
-                    <?php $this->widget('BxSlider', array(
+                    <?php $this->widget('CodaSlider', array(
                         'items'=>$this->getScrapItems('Слайдер на главной'),
                         'options'=>array(
-                            'auto'=>false,
-                            'pager'=>true,
-                        ),
-                        'width'=>'770',
-                        'height'=>'355',
+                            'autoHeight'=>false,
+                            'dynamicArrows'=>false,
+                            'autoSlide'=>true,
+                        )
                     )); ?>
                 <?php endif; ?>
             </div>

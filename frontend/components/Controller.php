@@ -12,6 +12,7 @@ class Controller extends CController
 	public $layout='//layouts/default';
 
     private $_scraps;
+
 	/**
 	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
 	 */
@@ -111,5 +112,13 @@ class Controller extends CController
             $this->_scraps=Scrap::model()->findAll("route=:route OR route=''", array(':route'=>$this->getRoute()));
         }
     }
+
+    public function processOutput($output)
+   	{
+        $output=parent::processOutput($output);
+
+
+   		return $output;
+   	}
 
 }

@@ -38,6 +38,12 @@
    	</div>
 
     <div class="row">
+   		<?php echo $form->labelEx($model,'contact_address'); ?>
+   		<?php echo $form->textField($model,'contact_address',array('size'=>60,'maxlength'=>500)); ?>
+   		<?php echo $form->error($model,'contact_address'); ?>
+   	</div>
+
+    <div class="row">
    		<?php echo $form->labelEx($model,'currency_default'); ?>
         <?php echo $form->dropDownList($model,'currency_default', $model->getCurrencyList()); ?>
    		<?php echo $form->error($model,'currency_default'); ?>

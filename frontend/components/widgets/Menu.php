@@ -27,7 +27,6 @@ class Menu extends CWidget {
     protected function saveAsHtml($items, $level) {
         $html='';
         foreach($items as $item) {
-            $id=isset($item['id'])?' id="'.$this->htmlOptions['id'].'_item_'.$item['id'].'"':'';
             $css='';
 
             if($this->nesting>$level && isset($item['hasChildren']) && $item['hasChildren']) {
@@ -45,7 +44,7 @@ class Menu extends CWidget {
 			if($css!=='')
 				$css=' class="'.$css.'"';
 
-            $html.='<li'.$id.$css.'>'.$this->renderTemplate($item, $level);
+            $html.='<li'.$css.'>'.$this->renderTemplate($item, $level);
 
             if($this->nesting>$level && isset($item['hasChildren']) && $item['hasChildren']) {
                 $html.="\n<ul>\n";

@@ -29,9 +29,9 @@ return array(
                     array('label'=>'Группы характеристик', 'url'=>array('featurePack/index')),
                     array('label'=>'Характеристики', 'url'=>array('feature/index')),
                     array('label'=>'Фильтры', 'url'=>array('filter/index')),
-                    array('label'=>'Прайс-листы', 'url'=>array('priceList/index')),
+                    //array('label'=>'Прайс-листы', 'url'=>array('priceList/index')),
                     array('label'=>'Яндекс.Маркет', 'url'=>array('market/index')),
-                    array('label'=>'Мониторинг конкурентов', 'url'=>array('competitor/index')),
+                    //array('label'=>'Мониторинг конкурентов', 'url'=>array('competitor/index')),
                     array('label'=>'Интеграция с 1С', 'url'=>array('enterprise1c/index')),
                 )),
 
