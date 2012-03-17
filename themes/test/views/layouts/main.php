@@ -50,10 +50,7 @@
             </div>
             <div class="header_r">
                 <div class="cart_bg">
-                    <div class="enter">
-                        <a href="#">Войти</a>
-                    </div>
-                    <?php echo CHtml::tag('div', array('id'=>'user-box'), $this->renderPartial('//order/_view',null,true))?>
+                    <?php echo CHtml::tag('div', array('id'=>'magaziller-user-box'), $this->renderPartial('//user/_view',null,true))?>
                     <?php echo CHtml::tag('div', array('id'=>'magaziller-cart-box'), $this->renderPartial('//order/_view',null,true))?>
                     <b class="clearb"></b>
                     <div class="social">

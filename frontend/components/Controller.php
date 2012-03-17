@@ -72,7 +72,7 @@ class Controller extends CController
         $cs->registerScript('PutToCompare', "
             $.putToCompare=function(productId){
                 $.get('$url', {id:productId}, function(html){
-                    $('#compare-box').html(html);
+                    $('#magaziller-compare-box').html(html);
                 })
             }
         ");
