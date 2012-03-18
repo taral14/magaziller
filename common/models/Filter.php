@@ -9,8 +9,6 @@
  * @property string $attribute
  * @property integer $type
  * @property string $alowed_values
- * @property integer $category_id
- * @property integer $position
  */
 class Filter extends CActiveRecord
 {
@@ -47,16 +45,22 @@ class Filter extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, attribute, type, category_id', 'required'),
-			array('type, category_id', 'numerical', 'integerOnly'=>true),
+			array('name, attribute, type', 'required'),
+			array('type', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('attribute', 'length', 'max'=>32),
-			array('alowed_values', 'safe'),
+			array('categoryIds, alowed_values', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, attribute, type, alowed_values, category_id', 'safe', 'on'=>'search'),
+			array('id, name, attribute, type, alowed_values', 'safe', 'on'=>'search'),
 		);
 	}
+
+    public function behaviors(){
+  	    return array(
+  		    'CAdvancedArBehavior' => array('class' => 'CAdvancedArBehavior'),
+  	    );
+    }
 
 	/**
 	 * @return array relational rules.
@@ -66,6 +70,7 @@ class Filter extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'categories'=>array(self::MANY_MANY, 'Category', '{{filter_category}}(filter_id, category_id)'),
             'category'=>array(self::BELONGS_TO, 'Category', 'category_id'),
 		);
 	}
@@ -81,19 +86,8 @@ class Filter extends CActiveRecord
 			'attribute' => 'Атрибут',
 			'type' => 'Тип',
 			'alowed_values' => 'Допустимые значения',
-			'category_id' => 'Категория',
-			'position' => 'Position',
 		);
 	}
-
-    public function defaultScope() {
-        $alias=$this->getTableAlias(false,false);
-        $scopes=array(
-            'order'=>"$alias.position",
-        );
-
-        return $scopes;
-    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -111,7 +105,6 @@ class Filter extends CActiveRecord
 		$criteria->compare('attribute',$this->attribute,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('alowed_values',$this->alowed_values,true);
-		$criteria->compare('category_id',$this->category_id);
 		$criteria->compare('position',$this->position);
 
 		return new CActiveDataProvider(get_class($this), array(
@@ -120,21 +113,31 @@ class Filter extends CActiveRecord
 	}
 
     public function getAttributeList() {
-        $list=array(
-            'id'=>'ID товара',
-            'name'=>'Название',
-            'brand_id'=>'Бренд',
-            'status'=>'Состояние',
-            'price'=>'Цена',
+        return CMap::mergeArray(array(
+                'id'=>'ID товара',
+                'name'=>'Название',
+                'brand_id'=>'Бренд',
+                'status'=>'Состояние',
+                'price'=>'Цена',
+            ),
+            CHtml::listData(Feature::model()->findAll(),'id','name')
         );
+    }
 
-        if($this->category_id) {
-            foreach($this->category->features as $feature) {
-                $list[$feature->attribute]=$feature->pack->name.': '.$feature->name;
-            }
+    public function hasCategory($id) {
+        return in_array($id, $this->categoryIds);
+    }
+
+    public function getCategoryIds() {
+        $ids = array();
+        foreach($this->categories as $category) {
+            array_push($ids, $category->id);
         }
+        return $ids;
+    }
 
-        return $list;
+    public function setCategoryIds($ids) {
+        $this->categories=empty($ids)?array():Category::model()->findAllByAttributes(array('id'=>$ids));
     }
 
     public function getTypeList() {

@@ -127,6 +127,17 @@ class CategoryController extends Controller
             FeatureCategory::model()->deleteAll('category_id=?', array($category->id));
     }
 
+    public function actionSaveFilters($id) {
+        $category=$this->loadModel($id);
+        if(isset($_POST['Filter_id'])) {
+            foreach($category->filterCategories as $fc) {
+                $fc->position=array_search($fc->filter_id, $_POST['Filter_id']);
+                $fc->save(false);
+            }
+		} else
+            FilterCategory::model()->deleteAll('category_id=?', array($category->id));
+    }
+
     public function actionAutoComplete($term) {
         $criteria=new CDbCriteria;
         if(strpos($term, ',')===false) {

@@ -101,8 +101,9 @@ class Category extends CActiveRecord
                                 'params'=>array(':status'=>Feature::STATUS_ENABLED),
             ),
             'featureCategories'=>array(self::HAS_MANY, 'FeatureCategory', 'category_id', 'index'=>'feature_id',),
-            'filters'=>array(self::HAS_MANY, 'Filter', 'category_id'),
-            'countFilters'=>array(self::STAT, 'Filter', 'category_id'),
+
+            'filters'=>array(self::MANY_MANY, 'Filter', '{{filter_category}}(category_id, filter_id)', 'order'=>'filters_filters.position'),
+            'filterCategories'=>array(self::HAS_MANY, 'FilterCategory', 'category_id', 'index'=>'filter_id'),
 
             'brands'=>array(self::HAS_MANY, 'Brand', array('brand_id'=>'id'), 'through'=>'products', 'group'=>'brands.id'),
         );
@@ -248,6 +249,14 @@ class Category extends CActiveRecord
         return count($this->features);
     }
 
+    public function getCountFilters() {
+        return count($this->filters);
+    }
+
+    public function getHasFilters() {
+        return $this->countFilters>0;
+    }
+
     public function getHasProducts() {
         return $this->countProducts>0;
     }
@@ -258,10 +267,6 @@ class Category extends CActiveRecord
 
     public function getHasFeatures() {
         return $this->countFeatures>0;
-    }
-
-    public function getHasFilters() {
-        return $this->countFilters>0;
     }
 
     public function getCountBrands() {

@@ -139,6 +139,10 @@ class FilterController extends Controller
         Yii::app()->end();
     }
 
+    public function actionUnbind() {
+
+    }
+
     public function actionSaveOrder() {
 		if(isset($_POST['Filter_id']))
         {

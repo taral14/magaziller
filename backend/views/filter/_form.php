@@ -35,26 +35,7 @@ $cs->registerScript('filter-dialog', "
 	'enableAjaxValidation'=>true,
 )); ?>
 
-    <div class="row">
-   		<?php echo $form->labelEx($model,'category_id'); ?>
-           <?php
-           $this->widget('McDropdown',array(
-               'model'=>$model,
-               'attribute'=>'category_id',
-               'data' => Category::model()->rooted()->findAll(),
-               'options'=>array(
-                   'allowParentSelect'=>false,
-                   'select'=>"js:function(cid){
-                       $.get('attributeList', {category_id:cid}, function(html){
-                           $('#Filter_attribute').html(html);
-                           $('#Filter_type').html('');
-                       });
-                   }",
-               )
-           ));
-           ?>
-   		<?php echo $form->error($model,'category_id'); ?>
-   	</div>
+<?php $this->beginClip('basic'); ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'name'); ?>
@@ -89,6 +70,37 @@ $cs->registerScript('filter-dialog', "
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить', array('class'=>'save_button')); ?>
 	</div>
+
+<?php $this->endClip(); ?>
+<?php $this->beginClip('categories'); ?>
+
+    <ul class="in-categories">
+        <?php echo $this->renderPartial('_categories', array(
+            'model'=>$model,
+            'categories'=>Category::model()->rooted()->findAll()
+        )); ?>
+    </ul>
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить', array('class'=>'save_button')); ?>
+	</div>
+
+<?php $this->endClip(); ?>
+
+<?php
+$this->widget('CTabView', array(
+    'tabs'=>array(
+        'tab1'=>array(
+            'title'=>'Основные',
+            'content'=>$this->clips['basic'],
+        ),
+        'tab2'=>array(
+            'title'=>'Использовать в категориях',
+            'content'=>$this->clips['categories'],
+        ),
+    )
+));
+?>
 
 </div><!-- form -->
 <?php $this->endWidget(); ?>
