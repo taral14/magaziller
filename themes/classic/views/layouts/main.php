@@ -6,7 +6,7 @@
     <meta name="description" content="<?php echo Yii::app()->seo->metaDescription; ?>">
     <meta name="keywords" content="<?php echo Yii::app()->seo->metaKeywords; ?>">
 
-    <meta http-equiv="Content-Language" content="ru">
+    <meta http-equiv="Content-Language" content="<?php echo Yii::app()->language;?>">
 
 	<!--[if lt IE 8]>
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/css/ie.css" media="screen, projection" />
