@@ -230,7 +230,6 @@
     <?php
         $features=$model->category->features;
         foreach($features as $i=>$feature):
-        $name='Product['.$feature->attribute.']';
         if(!isset($features[$i-1]) || $features[$i-1]->pack_id!=$feature->pack_id):
     ?>
 
@@ -261,6 +260,20 @@
             break;
             case Feature::TYPE_SELECT:
                 echo $form->dropDownList($model, $feature->attribute, $feature->selectValues, array('empty'=>'','style'=>'width:370px;'));
+            break;
+            case Feature::TYPE_COLOR:
+                if(empty($feature->selectValues)) {
+                    $this->widget('MiniColors', array(
+                        'model'=>$model,
+                        'attribute'=>$feature->attribute,
+                    ));
+                } else {
+                    $options=array();
+                    foreach($feature->selectValues as $key=>$val) {
+                        $options[$key]=array('style'=>'background:'.$val);
+                    }
+                    echo $form->dropDownList($model, $feature->attribute, $feature->selectValues, array('empty'=>'','style'=>'width:370px;', 'options'=>$options));
+                }
             break;
             /*case Feature::TYPE_IMAGE:
             case Feature::TYPE_FILE:

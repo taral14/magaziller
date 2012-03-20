@@ -32,6 +32,20 @@
             case Feature::TYPE_SELECT:
                 echo CHtml::dropDownList($name, null, $feature->selectValues, array('empty'=>'','style'=>'width:370px;'));
             break;
+            case Feature::TYPE_COLOR:
+                if(empty($feature->selectValues)) {
+                    $this->widget('MiniColors', array(
+                        'name'=>$name,
+                        'value'=>'#000000',
+                    ));
+                } else {
+                    $options=array();
+                    foreach($feature->selectValues as $key=>$val) {
+                        $options[$key]=array('style'=>'background:'.$val);
+                    }
+                    echo CHtml::dropDownList($name, null, $feature->selectValues, array('empty'=>'','style'=>'width:370px;', 'options'=>$options));
+                }
+            break;
             /*case Feature::TYPE_IMAGE:
             case Feature::TYPE_FILE:
                 $this->widget('ElFinderInput', array(

@@ -8,10 +8,6 @@ class CartComponent extends CMap {
      */
     public $refresh = true;
 
-    public $discounts = array();
-
-    public $cartId = __CLASS__;
-
     /**
      * Cart-wide discount sum
      * @var float
@@ -19,15 +15,30 @@ class CartComponent extends CMap {
     protected $discountPrice = 0.0;
 
     public function init(){
+        $config=require Yii::getPathOfAlias('common.config.handlers').'.php';
+        foreach($config as $event=>$handlers) {
+            if($this->hasEvent($event)) {
+                foreach($handlers as $handler)
+                    $this->attachEventHandler($event, $handler);
+            }
+        }
         $this->restoreFromSession();
     }
 
+    public function getDiscounts() {
+        return array(
+            array(
+                'class'=>'QuantityDiscount',
+                'rate'=>10,
+                'minQuantity'=>2,
+            )
+        );
+    }
     /**
      * Restores the shopping cart from the session
      */
     public function restoreFromSession() {
-        $data = Yii::app()->user->getState(__CLASS__);
-        is_array($data) || $data=array();
+        $data = Yii::app()->user->getState(__CLASS__, array());
         foreach ($data as $product_id => $quantity) {
             $this->put(Product::model()->findByPk($product_id), $quantity);
         }
@@ -73,17 +84,12 @@ class CartComponent extends CMap {
      * @param int $quantity
      */
     public function update(Product $product, $quantity) {
-        if (!($product instanceof CComponent))
-            throw new InvalidArgumentException('invalid argument 1, product must implement CComponent interface');
-
         $key = $product->id;
 
         $product->attachBehavior("CartBehavior", new CartBehavior());
         $product->setRefresh($this->refresh);
-
         $product->setQuantity($quantity);
         $product->setOrderPrice($product->price);
-        
 
         if ($product->getQuantity() < 1)
             $this->remove($key);
@@ -100,11 +106,7 @@ class CartComponent extends CMap {
      * @return void
      */
     protected function saveState() {
-        $arr=array();
-        foreach($this->toArray() as $product) {
-            $arr[$product->id]=$product->getQuantity();
-        }
-        Yii::app()->user->setState(__CLASS__, $arr);
+        Yii::app()->user->setState(__CLASS__, CHtml::listData($this->products, 'id', 'quantity'));
     }
 
     /**
@@ -166,7 +168,7 @@ class CartComponent extends CMap {
         foreach ($this->discounts as $discount)
         {
             $discountObj = Yii::createComponent($discount);
-            $discountObj->setShoppingCart($this);
+            $discountObj->setCart($this);
             $discountObj->apply();
         }
     }

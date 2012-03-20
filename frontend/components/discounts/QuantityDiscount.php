@@ -13,11 +13,11 @@ class QuantityDiscount extends Discount {
     public $minQuantity=1;
 
     public function apply() {
-        foreach ($this->shoppingCart as $position) {
-            $quantity = $position->getQuantity();
+        foreach ($this->cart as $product) {
+            $quantity = $product->getQuantity();
             if ($quantity >= $this->minQuantity) {
-                $discountPrice = $this->rate * $position->getPrice() / 100;
-                $position->addDiscountPrice($discountPrice);
+                $discountPrice = $this->rate * $product->getOrderPrice() * $quantity / 100;
+                $product->addDiscountPrice($discountPrice);
             }
         }
     }

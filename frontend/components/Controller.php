@@ -59,7 +59,7 @@ class Controller extends CController
                 if(/^[0-9]+$/.test(quantity)==false) {
                     quantity=$(quantity).val();
                 }
-                quantity=Math.max(parseInt(quantity), 1);
+                quantity=Math.max(parseInt(quantity), 1) || 1;
                 $.get('$url', {
                     id:productId,
                     quantity:quantity

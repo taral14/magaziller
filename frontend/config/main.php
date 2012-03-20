@@ -7,10 +7,8 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-        'application.components.behaviors.*',
-        'application.components.helpers.*',
         'application.components.widgets.*',
-        'application.components.handlers.*',
+        'application.components.discounts.*',
     ),
 
 	'components'=>array(

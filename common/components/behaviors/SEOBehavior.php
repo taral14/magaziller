@@ -65,7 +65,7 @@ class SEOBehavior extends CActiveRecordBehavior {
                 ':entity'=>$this->owner->id,
             ));
         } else {
-            $sql="INSERT INTO $this->tableName (route,entity,metaTitle,metaKeywords,metaDescription) VALUES (:r,:e,:t,:k,:d)" .
+            $sql="INSERT INTO $this->tableName (route,entity,metaTitle,metaKeywords,metaDescription) VALUES (:r,:e,:t,:k,:d) " .
                  "ON DUPLICATE KEY UPDATE metaTitle=:t, metaKeywords=:k, metaDescription=:d";
             Yii::app()->db->createCommand($sql)->execute(array(
                 ':r'=>$this->route,

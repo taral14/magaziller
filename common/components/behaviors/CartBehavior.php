@@ -106,4 +106,8 @@ class CartBehavior extends CActiveRecordBehavior {
     public function setDiscountPrice($price) {
         $this->discountPrice = $price;
     }
+
+    public function getDiscountPrice() {
+        return $this->discountPrice;
+    }
 }

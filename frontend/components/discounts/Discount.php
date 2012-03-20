@@ -9,10 +9,10 @@
  */
 abstract class Discount {
 
-    protected $shoppingCart;
+    protected $cart;
 
-    public function setShoppingCart(EShoppingCart $shoppingCart) {
-        $this->shoppingCart = $shoppingCart;
+    public function setCart(CartComponent $cart) {
+        $this->cart = $cart;
     }
 
     /**

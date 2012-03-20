@@ -50,7 +50,13 @@ switch($data->payment_status) {
                 <?php foreach($data->products as $product): ?>
                 <tr>
                     <td><?php echo CHtml::link($product->name, array('product/update', 'id'=>$product->id)) ; ?></td>
-                    <td><?php echo $product->quantity ; ?> × <?php echo Yii::app()->priceFormatter->format($product->orderPrice, true); ?></td>
+                    <td>
+                        <?php echo $product->quantity ; ?> × <?php echo Yii::app()->priceFormatter->format($product->orderPrice, true); ?>
+                        <?php if($product->discountPrice): ?>
+                            - <?php echo Yii::app()->priceFormatter->format($product->discountPrice); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo Yii::app()->priceFormatter->format($product->sumPrice); ?></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php if($data->delivery): ?>
@@ -58,12 +64,21 @@ switch($data->payment_status) {
                     <td>
                         <?php echo CHtml::link('Доставка: '.$data->delivery->name, array('delivery/update', 'id'=>$data->delivery->id)) ; ?>
                     </td>
+                    <td></td>
                     <td><?php echo Yii::app()->priceFormatter->format($data->delivery_price, true); ?></td>
                 </tr>
                 <?php endif; ?>
                 <tr>
                     <td><b>Итого</b></td>
-                    <td><b><?php echo Yii::app()->priceFormatter->format($data->cost, true); ?></b></td>
+                    <td><b>
+                        <?php if($data->discountPrice): ?>
+                            <?php echo Yii::app()->priceFormatter->format($data->getCost(false), true); ?> -
+                            <?php echo Yii::app()->priceFormatter->format($data->discountPrice, true); ?>
+                        <?php endif; ?>
+                    </b></td>
+                    <td><b>
+                        <?php echo Yii::app()->priceFormatter->format($data->cost, true); ?>
+                    </b></td>
                 </tr>
         </table>
     </div>

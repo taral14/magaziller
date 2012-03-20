@@ -25,6 +25,7 @@ class Feature extends CActiveRecord
     const TYPE_IMAGE=6;
     const TYPE_FILE=7;
     const TYPE_PRICE=8;
+    const TYPE_COLOR=9;
 
     const IN_DETAIL='in_detail';
     const IN_SUMMARY='in_summary';

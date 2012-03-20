@@ -6,8 +6,9 @@
  * The followings are the available columns in table '{{order}}':
  * @property integer $id
  * @property integer $delivery_id
- * @property double $delivery_price
+ * @property float $delivery_price
  * @property integer $payment_id
+ * @property float $discountPrice
  * @property integer $status
  * @property integer $user_id
  * @property string $name
@@ -66,7 +67,7 @@ class Order extends CActiveRecord
             array('name, phone, email, address, comment', 'filter', 'filter'=>'strip_tags'),
 			array('name, phone, email, address', 'required'),
 			array('payment_status, delivery_id, payment_id, status, user_id', 'numerical', 'integerOnly'=>true),
-			array('delivery_price', 'numerical'),
+			array('delivery_price, discountPrice', 'numerical'),
             array('delivery_id', 'exist', 'className'=>'Delivery', 'attributeName'=>'id', 'message'=>'Такого способа доставки нету'),
             array('payment_id', 'exist', 'className'=>'Payment', 'attributeName'=>'id', 'message'=>'Такой формы оплаты нету'),
 			array('name, address, phone, email', 'length', 'max'=>255),
@@ -118,8 +119,6 @@ class Order extends CActiveRecord
             'delivery'=>array(self::BELONGS_TO, 'Delivery', 'delivery_id'),
             'payment'=>array(self::BELONGS_TO, 'Payment', 'payment_id'),
             'user'=>array(self::BELONGS_TO, 'User', 'user_id'),
-            'orderProducts'=>array(self::HAS_MANY, 'OrderProduct', 'order_id', 'with'=>'product'),
-            //'products'=>array(self::HAS_MANY, 'Product', 'order_id', 'with'=>'product'),
 		);
 	}
 
@@ -134,6 +133,7 @@ class Order extends CActiveRecord
 			'delivery_price' => 'Стоимость доставки',
 			'payment_id' => 'Оплата',
             'payment_status' => 'Состояние оплаты',
+            'discountPrice' => 'Скидка',
 			'status' => 'Состояние',
 			'user_id' => 'Пользователь',
 			'name' => 'Ф.И.О.',
@@ -207,40 +207,51 @@ class Order extends CActiveRecord
 
     public function getCost($withDiscount = true) {
         $price=$this->delivery_price;
-        foreach($this->products as $product) {
-            $price+=$product->sumPrice;
+        foreach ($this->products as $product)
+        {
+            $price += $product->getSumPrice($withDiscount);
         }
+
+        if($withDiscount)
+            $price -= $this->discountPrice;
+
         return $price;
     }
 
     public function addProduct(Product $product) {
-        if(empty($product->quantity) || empty($product->orderPrice) || $product->quantity < 1) {
-            return;
+        if($product->asa('CartBehavior')==false) {
+            throw new CException('Товар должен содержать поведение "CartBehavior"');
         }
-        $orderProduct=OrderProduct::model()->findByAttributes(array(
-            'order_id'=>$this->id,
-            'product_id'=>$product->id,
+
+        $sql="INSERT INTO {{order_product}} (order_id, product_id, price, discountPrice, quantity) VALUES (:order_id,:product_id,:price,:discountPrice,:quantity) " .
+             "ON DUPLICATE KEY UPDATE price=:price, discountPrice=:discountPrice, quantity=:quantity";
+
+        Yii::app()->db->createCommand($sql)->execute(array(
+            ':order_id'=>$this->id,
+            ':product_id'=>$product->id,
+            ':price'=>$product->getOrderPrice(),
+            ':discountPrice'=>$product->getDiscountPrice(),
+            ':quantity'=>$product->getQuantity(),
         ));
-        if($orderProduct==null) {
-            $orderProduct=new OrderProduct;
-            $orderProduct->quantity=$product->quantity;
-            $orderProduct->order_id=$this->id;
-            $orderProduct->product_id=$product->id;
-        } else {
-            $orderProduct->quantity+=$product->quantity;
-        }
-        $orderProduct->price=$product->orderPrice;
-        $orderProduct->save();
     }
 
     public function getProducts() {
         if($this->_products==null) {
             $this->_products=array();
-            foreach($this->orderProducts as $orderProduct) {
-                $product=$orderProduct->product;
-                $product->attachBehavior("CartBehavior", new CartBehavior());
-                $product->setQuantity($orderProduct->quantity);
-                $product->setOrderPrice($orderProduct->price);
+
+            $rows=Yii::app()->db->createCommand()
+                ->select('t.*, t2.quantity, t2.price as orderPrice, t2.discountPrice')
+                ->from('{{product}} as t')
+                ->join('{{order_product}} as t2', 't2.product_id=t.id')
+                ->where('t2.order_id=:id', array(':id'=>$this->id))
+                ->queryAll();
+
+            foreach($rows as $row) {
+                $product=Product::model()->populateRecord($row);
+                $product->attachBehavior("CartBehavior", new CartBehavior);
+                $product->setQuantity($row['quantity']);
+                $product->setOrderPrice($row['orderPrice']);
+                $product->setDiscountPrice($row['discountPrice']);
                 array_push($this->_products, $product);
             }
         }
@@ -255,7 +266,7 @@ class Order extends CActiveRecord
     }
 
     public function getHasProducts() {
-        return $this->CountProducts();
+        return $this->countProducts>0;
     }
 
     public function status($status) {

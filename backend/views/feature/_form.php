@@ -1,7 +1,7 @@
 <?php
     Yii::app()->clientScript->registerScript('feature_type', "
         $('#Feature_type').change(function(){
-            if($(this).val()==".Feature::TYPE_SELECT." || $(this).val()==".Feature::TYPE_BOOL.")
+            if($(this).val()==".Feature::TYPE_SELECT." || $(this).val()==".Feature::TYPE_BOOL." || $(this).val()==".Feature::TYPE_COLOR.")
                 $('.alowed_values').show();
             else
                 $('.alowed_values').hide();

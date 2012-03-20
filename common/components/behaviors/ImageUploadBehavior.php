@@ -1,5 +1,5 @@
 <?php
-
+// TODO сделать возможность передавать в input file массив. И возможность указывать с какого ключа делать изображение определенного размера
 class ImageUploadBehavior extends CActiveRecordBehavior {
 
 	public $fileAttribute;
