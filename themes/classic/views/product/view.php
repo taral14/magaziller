@@ -1,103 +1,215 @@
-<?php
-Yii::app()->getClientScript()->registerScript('Menu', "
-    $('.more-menu-head a').click(function(){
-        var content_id=$(this).attr('href');
-        $('.more-menu-head li').removeClass('more-active');
-        $(this).parent().addClass('more-active');
-        $('.tab-more').hide();
-        $(content_id).show();
-        return false;
-    });
-    $('.more-menu-head a:first')
-");
-?>
-<div class="content-more">
+<?php $this->layout='column1'; ?>
 
-       <?php $this->widget('zii.widgets.CBreadcrumbs', array(
-           'links'=>$this->breadcrumbs,
-           'htmlOptions'=>array('class'=>'bread'),
-           'separator'=>'<img src="'.Yii::app()->theme->baseUrl.'/images/bread-arrow.png" />'
-       )); ?>
-
-        <b class="clearb"></b>
-        <div class="carousel">
-            <img height="433" src="<?php echo $product->getImageUrl('large'); ?>" />
-        </div>
-    
-        <div class="more-info">
-        	<div class="more-price">
-            <?php echo Yii::app()->priceFormatter->templateFormat('{int}<strong>{currency}</strong>', $product->price); ?>
-            </div>
-            <b class="clearb"></b>
-            <h1><?php echo $product->name; ?></h1>
-            <p>
-
-
-               <ul class="summary-reatures">
-<?php foreach($product->getFeatures(Feature::IN_SUMMARY) as $feature) : ?>
-    <li><?php if(!$feature->hide_name) echo CHtml::tag('strong', array(), $feature->name).': '; ?> <?php echo $feature->value; ?></li>
-<?php endforeach; ?>
-               </ul>
-                <?php echo $product->summary; ?></p>
-            <a class="more-buy" onclick="$.putToCart(<?php echo $product->id; ?>)" href="#"></a>
-
-        <?php $this->beginWidget('PrettyPhoto', array(
-            'gallery'=>true,
-            'options'=>array(
-                'overlay_gallery'=>false,
-            ),
-        )); ?>
-            <?php foreach($product->images as $image): ?>
-
-            <a href="<?php echo $image->getImageUrl('large'); ?>"><img height="80" src="<?php echo $image->getImageUrl('small'); ?>" /></a>
-
-            <?php endforeach; ?>
-        <?php $this->endWidget(); ?>
-
-        </div>
-        <b class="clearb"></b>
-
-    <?php $this->beginClip('accessory'); ?>
-        <ul>
-            <?php foreach($product->accessories as $accessory): ?>
-                <?php $this->renderPartial('/product/_view', array('product'=>$accessory)); ?>
-            <?php endforeach; ?>
-        </ul>
-    <?php $this->endClip(); ?>
-
-    <?php
-    $this->widget('CTabView', array(
-        'tabs'=>array(
-            'tab1'=>array(
-                'title'=>'Обзор',
-                'content'=>$product->description,
-            ),
-            'tab2'=>array(
-                'title'=>'Характеристики',
-                'view'=>'_features',
-                'data'=>array(
-                    'product'=>$product,
-                    'features'=>$product->getFeatures(Feature::IN_DETAIL),
-                ),
-            ),
-            'tab3'=>array(
-                'title'=>'Аксессуары',
-                'content'=>$this->clips['accessory']
-            ),
-        ),
-        //'cssFile'=>false,
-    ));
-    ?>
-
-<?php if($product->hasSimilars):  ?>
-        <b class="clearb"></b>
-
-        <div class="recommend">
-        	<h1>Похожие товары <?php echo $product->name; ?></h1>
-            <ul>
-                <?php foreach($product->similars as $sProduct): ?>
-                    <?php $this->renderPartial('/product/_view', array('product'=>$sProduct)); ?>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-<?php endif; ?>
+<div class="content_bg">
+  	<div class="content_center">
+      	<div class="content">
+          	<div class="more">
+                  <?php $this->widget('zii.widgets.CBreadcrumbs', array(
+                      'links'=>$this->breadcrumbs,
+                  )); ?>
+                  <div class="more_l">
+                  	<div class="more_pics">
+                          <div class="small">
+                          	<a href="#"><img src="pic/more1.png" /></a>
+                          </div>
+                          <div class="small">
+                          	<a href="#"><img src="pic/more2.png" /></a>
+                          </div>
+                          <div class="small">
+                          	<a href="#"><img src="pic/more3.png" /></a>
+                          </div>
+                      </div>
+                      <div class="more_pic">
+                      	<a href="#"><img src="pic/more.png" /></a>
+                      </div>
+                      <div class="more_pic_button">
+                      	<a href="#"><img src="images/enlarge_icon.png" /></a>
+                      </div>
+                  </div>
+                  <div class="more_r">
+                  	<h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      <div class="more_l_l">
+                          <div class="more_r_price">
+                              <?php echo Yii::app()->priceFormatter->templateFormat('{int}<sup>{currency}</sup>', $product->price); ?>
+                          </div>
+                          <div class="old_price">
+                          	<div>Старая цена</div>
+                              <?php echo Yii::app()->priceFormatter->templateFormat('{int}<sup>{currency}</sup>', $product->other_price); ?>
+                          </div>
+                          <b class="clearb"></b>
+                          <div class="more_r_opt">
+                              оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                      </div>
+                      <div class="more_l_r">
+                      	<input class="cart_buy" onclick="$.putToCart(<?php echo $product->id; ?>)" type="submit" value  />
+                          <b class="clearb"></b>
+                          <label><input type="radio" />оптом 480 грн.</label>
+                      </div>
+                      <div class="info">
+                      	Размер
+                          <select>
+                              <option>S</option>
+                              <option>M</option>
+                              <option>L</option>
+                              <option>XL</option>
+                          </select>
+                      </div>
+                      <div class="info">
+                      	Размеры в упаковке: XS, S, M, L, XL, XXL, XXXL
+                      </div>
+                      <div class="info">
+                      	<span>Доступные цвета:</span>
+                          <div class="color"><a href="#"><img src="images/color1.png" /></a></div>
+                          <div class="color"><a href="#"><img src="images/color2.png" /></a></div>
+                          <div class="color"><a href="#"><img src="images/color3.png" /></a></div>
+                          <div class="color"><a href="#"><img src="images/color4.png" /></a></div>
+                          <div class="color"><a href="#"><img src="images/color5.png" /></a></div>
+                      </div>
+                      <div class="description_nav">
+                      	<ul>
+                          	<li class="active"><a href="#">ОПИСАЕНИЕ</a></li>
+                              <li><a href="#">РАЗМЕРЫ</a></li>
+                          </ul>
+                      </div>
+                      <div class="description">
+                      Футболка с принтом – способ самовыражения.
+  И вряд ли кто-то со мной поспорит. Принт на футболке, как статус в icq, выражает твое настроение и внутренний мир. К чему-то призывает, либо просто улыбает.
+                      </div>
+                  </div>
+                  <div class="other">
+                  	<div class="other_head">
+                      	Рекомендуемые товары
+                      </div>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog7.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog8.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog9.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog9.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                  </div>
+                  <div class="other">
+                  	<div class="other_head">
+                      	Другие предложения
+                      </div>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog7.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog8.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog9.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                      <a href="#"><div class="catalog_item">
+                      	<div class="catalog_item_pic">
+                          	<img src="pic/catalog9.png" />
+                          </div>
+                          <div class="catalog_item_price">
+                          	160
+                              <sup>грн</sup>
+                          </div>
+                          <div class="catalog_item_opt">
+                          	оптовая
+                              <strong>480</strong>
+                              за уп.
+                          </div>
+                          <h1>CHOCOLATE PEDAL PUSHERS</h1>
+                      </div></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

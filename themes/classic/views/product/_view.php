@@ -1,13 +1,14 @@
-<li class="best-item">
-    <div class="best-inactive">
-        <a href="<?php echo $product->url; ?>"><img height="250" src="<?php echo $product->getImageUrl('small'); ?>" /></a>
-        <b class="clearb"></b>
-        <div class="best-price">
-        <?php echo Yii::app()->priceFormatter->templateFormat('{int}<span>{currency}</span>', $product->price); ?>
-        </div>
-        <a class="buy" onclick="$.putToCart(<?php echo $product->id; ?>); return false;" href="#"></a>
-        <a class="buy" onclick="$.putToCompare(<?php echo $product->id; ?>); return false;" href="#"></a>
-        <b class="clearb"></b>
-        <a class="name" href="<?php echo $product->url; ?>"><?php echo $product->name; ?></a>
-    </div>
-</li>
+<a href="<?php echo $product->url; ?>"><div class="catalog_item">
+    <div class="catalog_item_pic">
+        <img src="<?php echo $product->getImageUrl('small'); ?>" />
+     </div>
+     <div class="catalog_item_price">
+        <?php echo Yii::app()->priceFormatter->templateFormat('{int}<sup>{currency}</sup>', $product->price); ?>
+     </div>
+     <div class="catalog_item_opt">
+        оптовая
+         <strong>480</strong>
+         за уп.
+     </div>
+     <h1><?php echo $product->name; ?></h1>
+</div></a>

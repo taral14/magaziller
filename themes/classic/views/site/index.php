@@ -1,54 +1,40 @@
-<br><br><br>
-
-<?php
-if($this->hasScrap('Проба')) {
-    foreach($this->getScrapItems('Проба') as $item) {
-        echo $item->renderTemplate();
-    }
-}
-?>
-
-<b class="clearb"></b>
-
-    <div class="disclaimer">
-    	<a class="deliv" href="<?php echo Yii::app()->createUrl('article/view', array('id'=>1)); ?>"><b>ДОСТАВКА</b> В ТЕЧЕНИИ ДНЯ</a>
-        <div class="vertline"></div>
-        <a class="warant" href="<?php echo Yii::app()->createUrl('article/view', array('id'=>5)); ?>"><b>ГАРАНТИЯ</b> ОТ ПРОИЗВОДИТЕЛЯ</a>
-        <div class="vertline"></div>
-        <a class="onsale" href="<?php echo Yii::app()->createUrl('article/view', array('id'=>6)); ?>"><b>АКЦИИ И СКИДКИ %</b></a>
-    </div>
-
-<b class="clearb"></b>
-
-<div class="content">
-    	<div class="cont-menu">
-        	<div class="cont-menu-head">
-            	<b>Меню</b>
+<div class="content_center">
+    <div class="content">
+    <div class="content_l_bg">
+        <div class="content_l">
+            <div class="left_menu_head">
+            Обирайте за категорією:
             </div>
-            <b class="clearb"></b>
-            <div class="zeleny"></div>
-            <div class="cont-menu-body">
-                <?php foreach(Category::model()->rooted()->findAll() as $category): ?>
-            	<a onclick="return false;" href="#"><strong><?php echo $category->name; ?></strong></a>
-            		<ul>
-                        <?php foreach($category->children as $child): ?>
-                    	<li><a href="<?php echo $child->url; ?>"><?php echo $child->name; ?></a></li>
-                        <?php endforeach; ?>
-                	</ul>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <div class="best">
-        	<div class="best-head">
-            Лучшие предложения!
-            </div>
-            <div class="best-content">
-            	<ul>
-                    <?php foreach(Product::model()->shopwindow()->limit(9)->findAll() as $product): ?>
-                    <?php $this->renderPartial('/product/_view', array('product'=>$product)); ?>
+            <div class="left_menu">
+                <table>
+                    <tr><td><a href="<?php echo Yii::app()->createUrl('product/catalog'); ?>">Усі категорії</a></td></tr>
+                    <?php foreach(Category::model()->rooted()->findAll() as $category): ?>
+                    <tr><td><a href="<?php echo $category->url; ?>"><?php echo $category->name; ?></a></td></tr>
                     <?php endforeach; ?>
-                </ul>
+                </table>
+            </div>
+        </div>
+        <div class="content_r">
+            <div class="slider">
+                <?php if($this->hasScrap('Слайдер на главной')): ?>
+                    <?php $this->widget('CodaSlider', array(
+                        'items'=>$this->getScrapItems('Слайдер на главной'),
+                        'options'=>array(
+                            'autoHeight'=>false,
+                            'dynamicArrows'=>false,
+                            'autoSlide'=>true,
+                        )
+                    )); ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-
+    </div>
+    <div class="index_nav">
+<?php if($this->hasScrap('4 блока на главной')): ?>
+      <?php foreach($this->getScrapItems('4 блока на главной') as $item): ?>
+          <?php echo $item->renderTemplate(); ?>
+      <?php endforeach; ?>
+<?php endif; ?>
+    </div>
+</div>
