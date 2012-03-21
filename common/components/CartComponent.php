@@ -26,13 +26,17 @@ class CartComponent extends CMap {
     }
 
     public function getDiscounts() {
-        return array(
-            array(
-                'class'=>'QuantityDiscount',
-                'rate'=>10,
-                'minQuantity'=>2,
-            )
-        );
+        $discounts=array();
+        $models=Discount::model()->findAll();
+        foreach($models as $model) {
+            $config=CMap::mergeArray(array(
+                'class'=>$model->handler,
+                'rate'=>$model->rate,
+                'rate_type'=>$model->rate_type,
+            ), $model->handlerParams);
+            array_push($discounts, $config);
+        }
+        return $discounts;
     }
     /**
      * Restores the shopping cart from the session

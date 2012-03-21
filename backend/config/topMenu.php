@@ -11,6 +11,7 @@ return array(
                     )),
                     array('label'=>'Доставка', 'url'=>array('delivery/index')),
                     array('label'=>'Оплата', 'url'=>array('payment/index')),
+                    array('label'=>'Скидки', 'url'=>array('discount/index')),
                 )),
 
                 array('label'=>'Контент', 'url'=>array('article/index'), 'items'=>array(

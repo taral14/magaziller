@@ -4,20 +4,23 @@
  * if there are two items in the same position (two equal products), add $rate % discount
  * to the first item.
  */
-class QuantityDiscount extends Discount {
-    /**
-     * Discount %
-     */
-    public $rate=0;
+class QuantityDiscount extends SDiscount {
 
-    public $minQuantity=1;
+    public $minCartQuantity;
+    public $minProductQuantity;
 
     public function apply() {
-        foreach ($this->cart as $product) {
-            $quantity = $product->getQuantity();
-            if ($quantity >= $this->minQuantity) {
-                $discountPrice = $this->rate * $product->getOrderPrice() * $quantity / 100;
-                $product->addDiscountPrice($discountPrice);
+        $quantity=$this->cart->getItemsCount();
+        if($this->minCartQuantity>0 && $quantity >= $this->minCartQuantity) {
+            $discountPrice=$this->getDiscountPrice($this->cart->getCost(false));
+            $this->cart->addDiscountPrice($discountPrice);
+        } elseif($this->minProductQuantity>0) {
+            foreach ($this->cart as $product) {
+                $quantity = $product->getQuantity();
+                if ($quantity >= $this->minProductQuantity) {
+                    $discountPrice=$this->getDiscountPrice($product->getOrderPrice() * $quantity);
+                    $product->addDiscountPrice($discountPrice);
+                }
             }
         }
     }

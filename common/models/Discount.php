@@ -8,13 +8,20 @@
  * @property string $name
  * @property string $handler
  * @property string $_handlerParams
- * @property double $rate
+ * @property float $rate
  * @property integer $rate_type
+ * @property integer $status
  * @property string $start_date
  * @property string $finish_date
  */
 class Discount extends CActiveRecord
 {
+    const STATUS_ENABLED=1;
+    const STATUS_DISABLED=2;
+
+    const RATE_PERCENT=1;
+    const RATE_NUMBER=2;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -33,6 +40,21 @@ class Discount extends CActiveRecord
 		return '{{discount}}';
 	}
 
+    public function defaultScope() {
+        $alias=$this->getTableAlias(false,false);
+        $scopes=array();
+
+        if(IS_FRONTED) {
+            $scopes['condition']="$alias.status=:status AND $alias.start_date<=:date AND $alias.finish_date>=:date";
+            $scopes['params']=array(
+                ':date'=>date('Y-m-d'),
+                ':status'=>Discount::STATUS_ENABLED
+            );
+        }
+
+        return $scopes;
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -41,12 +63,13 @@ class Discount extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, handler, rate, rate_type', 'required'),
-			array('rate_type', 'numerical', 'integerOnly'=>true),
+			array('name, handler, rate, rate_type, status, start_date, finish_date', 'required'),
+			array('rate_type, status', 'numerical', 'integerOnly'=>true),
 			array('rate', 'numerical'),
 			array('name', 'length', 'max'=>255),
 			array('handler', 'length', 'max'=>32),
-			array('_handlerParams, start_date, finish_date', 'safe'),
+			array('handlerParams', 'safe'),
+            array('start_date, finish_date', 'date', 'format'=>'yyyy-mm-dd'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, handler, _handlerParams, rate, rate_type, start_date, finish_date', 'safe', 'on'=>'search'),
@@ -71,13 +94,14 @@ class Discount extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'Name',
-			'handler' => 'Handler',
-			'_handlerParams' => 'Handler Params',
-			'rate' => 'Rate',
-			'rate_type' => 'Rate Type',
-			'start_date' => 'Start Date',
-			'finish_date' => 'Finish Date',
+			'name' => 'Название',
+			'handler' => 'Обработчик скидки',
+			'_handlerParams' => 'Параметры обработчика',
+			'rate' => 'Величина скидки',
+			'rate_type' => 'Тип скидки',
+            'status' => 'Состояние',
+			'start_date' => 'Дата начала скидки',
+			'finish_date' => 'Дата конца скидки',
 		);
 	}
 
@@ -98,6 +122,7 @@ class Discount extends CActiveRecord
 		$criteria->compare('_handlerParams',$this->_handlerParams,true);
 		$criteria->compare('rate',$this->rate);
 		$criteria->compare('rate_type',$this->rate_type);
+        $criteria->compare('status',$this->status);
 		$criteria->compare('start_date',$this->start_date,true);
 		$criteria->compare('finish_date',$this->finish_date,true);
 
@@ -105,4 +130,22 @@ class Discount extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    public function getHandlerList() {
+        return array(
+            'QuantityDiscount'=>'Скидка после определенного количества товаров в корзине',
+            /*'GroupDiscount'=>'Скидка на группу пользователей',
+            'BuyTogetherDiscount'=>'Скидка на покупку некоторых товаров вместе',
+            'CouponDiscount'=>'Купоны на получение скидки',*/
+            // TODO сделать скидки на остальные обработчики
+        );
+    }
+
+    public function getHandlerParams() {
+        return unserialize($this->_handlerParams);
+    }
+
+    public function setHandlerParams($val) {
+        $this->_handlerParams=serialize($val);
+    }
 }
