@@ -118,13 +118,15 @@ class Discount extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('handler',$this->handler,true);
-		$criteria->compare('_handlerParams',$this->_handlerParams,true);
+		$criteria->compare('handler',$this->handler);
 		$criteria->compare('rate',$this->rate);
 		$criteria->compare('rate_type',$this->rate_type);
         $criteria->compare('status',$this->status);
-		$criteria->compare('start_date',$this->start_date,true);
-		$criteria->compare('finish_date',$this->finish_date,true);
+
+        if($this->start_date)
+		    $criteria->compare('start_date','<='.$this->start_date);
+		if($this->finish_date)
+            $criteria->compare('finish_date','>='.$this->finish_date);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

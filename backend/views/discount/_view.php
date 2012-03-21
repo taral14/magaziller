@@ -1,14 +1,14 @@
 <div class="view">
 
 	<b>
-	    <?php echo $data->title; ?>
-        (<?php echo Yii::app()->dateFormatter->format('dd MMMM y, HH:mm:ss', $data->update_time); ?>)
-        <span style="float: right;"><?php echo Lookup::item('ArticleStatus', $data->status); ?></span>
+	    <?php echo $data->name; ?>
+        (от <?php echo Yii::app()->dateFormatter->format('dd MMMM y', $data->start_date); ?> до <?php echo Yii::app()->dateFormatter->format('dd MMMM y', $data->finish_date); ?>)
+        <span style="float: right;"><?php echo Lookup::item('DiscountStatus', $data->status); ?></span>
     </b>
 
     <b class="clearb"></b>
 
-    <a class="url" href="<?php echo $data->url; ?>"><?php echo Yii::app()->request->hostInfo.$data->url; ?></a>
+    <?php echo CArray::get($data->getHandlerList(), $data->handler, '&nbsp;'); ?>
 
     <div class="management">
         <?php echo CHtml::link('Редактировать', array('update', 'id'=>$data->id)); ?> |

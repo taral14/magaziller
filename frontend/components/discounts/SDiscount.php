@@ -9,9 +9,7 @@
  */
 abstract class SDiscount {
 
-    public $rate=0;
-    public $rate_type=Discount::RATE_NUMBER;
-
+    public $model;
     protected $cart;
 
     public function setCart(CartComponent $cart) {
@@ -27,10 +25,10 @@ abstract class SDiscount {
     abstract public function apply();
 
     public function getDiscountPrice($price) {
-        if($this->rate_type==Discount::RATE_NUMBER) {
-            return $this->rate;
+        if($this->model->rate_type==Discount::RATE_NUMBER) {
+            return $this->model->rate;
         } else {
-            return $price*$this->rate/100;
+            return $price*$this->model->rate/100;
         }
     }
 

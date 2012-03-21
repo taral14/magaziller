@@ -31,8 +31,7 @@ class CartComponent extends CMap {
         foreach($models as $model) {
             $config=CMap::mergeArray(array(
                 'class'=>$model->handler,
-                'rate'=>$model->rate,
-                'rate_type'=>$model->rate_type,
+                'model'=>$model,
             ), $model->handlerParams);
             array_push($discounts, $config);
         }
